@@ -305,6 +305,11 @@ body.light #dots i.on{background:var(--gl)!important}
 }
 #pg-nav button:hover{border-color:var(--g);background:rgba(16,31,56,.88)}
 #pg-nav button:active{transform:scale(.94)}
+
+/* экран «гаснет» перед возвратом на титульный, как блокировка телефона */
+#pg-lock{position:fixed;inset:0;z-index:200;background:#070d18;opacity:0;
+  animation:pg-lock-in .6s ease forwards}
+@keyframes pg-lock-in{to{opacity:1}}
 #pg-nav svg{width:44%;height:44%;fill:none;stroke:currentColor;
   stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 @media (max-aspect-ratio:1/1){
@@ -332,6 +337,12 @@ body.light #dots i.on{background:var(--gl)!important}
   .cr{bottom:12.6vh!important}
   .cap,.num .cap{padding-bottom:17vh!important}
 }
+
+/* ================= КИОСК: без масштабирования жестами =================
+   Двумя пальцами страница не «щиплется», двойное касание не увеличивает,
+   Ctrl+колесо и Ctrl +/-/0 перехватываются скриптом ниже. */
+html,body{touch-action:pan-x pan-y;-ms-touch-action:pan-x pan-y;
+  overscroll-behavior:none;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 </style>
 </head>
 <body>
@@ -633,10 +644,72 @@ go(0);
     e.stopPropagation(); step('ArrowRight');
   });
 
+  /* звук нажатия для кнопок оболочки: синтез, без аудиофайлов */
+  var pgAC = null, pgSnd = true;
+  try { pgSnd = new URLSearchParams(location.search).get('sound') !== 'off'; } catch(e){}
+  function pgTap(){
+    if(!pgSnd) return;
+    try{
+      if(!pgAC){ var C = window.AudioContext || window.webkitAudioContext; if(!C) return; pgAC = new C(); }
+      if(pgAC.state === 'suspended') pgAC.resume();
+      var c = pgAC, t = c.currentTime;
+      var o = c.createOscillator(), g = c.createGain();
+      o.type = 'triangle';
+      o.frequency.setValueAtTime(880, t);
+      o.frequency.exponentialRampToValueAtTime(540, t + 0.07);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(0.045, t + 0.008);
+      g.gain.exponentialRampToValueAtTime(0.0005, t + 0.10);
+      o.connect(g); g.connect(c.destination);
+      o.start(t); o.stop(t + 0.12);
+    }catch(e){}
+  }
+  document.getElementById('pg-main').addEventListener('pointerdown', pgTap, true);
+
+  /* --- 5 минут без действий посетителя: киоск возвращается на титульный экран --- */
+  var IDLE_MS = 300000, idleT = null;
+  function pgLock(){
+    if (document.getElementById('pg-lock')) return;
+    var v = document.createElement('div');
+    v.id = 'pg-lock';
+    document.body.appendChild(v);
+    setTimeout(function(){ location.href = 'index.html'; }, 620);
+  }
+  function pgIdle(){ clearTimeout(idleT); idleT = setTimeout(pgLock, IDLE_MS); }
+  ['pointerdown','touchstart','mousemove','wheel','keydown'].forEach(function(ev){
+    document.addEventListener(ev, pgIdle, {passive:true});
+  });
+  pgIdle();
+
   document.getElementById('pg-main').addEventListener('click', function(e){
     e.stopPropagation();
     location.href = 'index.html?lang=' + cur + '#tp-menu';
   });
+})();
+</script>
+<script>
+/* --- киоск: запрет масштабирования (щипок, двойное касание, Ctrl+колесо, Ctrl +/-) --- */
+(function(){
+  function stop(e){ e.preventDefault(); }
+  ['gesturestart','gesturechange','gestureend'].forEach(function(t){
+    document.addEventListener(t, stop, {passive:false});
+  });
+  document.addEventListener('touchstart', function(e){
+    if (e.touches && e.touches.length > 1) e.preventDefault();
+  }, {passive:false, capture:true});
+  document.addEventListener('touchmove', function(e){
+    if (e.touches && e.touches.length > 1) e.preventDefault();
+  }, {passive:false, capture:true});
+  document.addEventListener('wheel', function(e){
+    if (e.ctrlKey) e.preventDefault();
+  }, {passive:false, capture:true});
+  document.addEventListener('keydown', function(e){
+    if ((e.ctrlKey || e.metaKey) &&
+        ['+','-','=','_','0'].indexOf(e.key) !== -1) e.preventDefault();
+  }, {capture:true});
+  document.addEventListener('dblclick', stop, {passive:false});
+  document.addEventListener('contextmenu', stop, {passive:false});
+  document.addEventListener('dragstart', stop, {passive:false});
 })();
 </script>
 </body>
