@@ -625,9 +625,10 @@ go(0);
   btns.forEach(function(b){
     b.addEventListener('click', function(){ paint(b.getAttribute('data-l')); });
   });
-  /* язык, выбранный на титульном экране, приходит в ?lang= */
+  /* язык задаётся на титульном экране: сначала ?lang=, затем сохранённый выбор */
   var q = null;
   try { q = new URLSearchParams(location.search).get('lang'); } catch(e){}
+  if (!q) { try { q = window.localStorage.getItem('bipLang'); } catch(e){} }
   var start = btns.filter(function(b){ return b.getAttribute('data-l') === q; })[0];
   paint(q && NAME[q] ? q : 'uz');
   if (start && !start.classList.contains('on')) start.click();
