@@ -287,6 +287,9 @@ body.tp-mode-inner .tp-bg__veil{
   overflow-y:auto;
 }
 .tp-menu__title{
+  /* заголовок центрируется по высоте свободного поля над карточками */
+  flex:1 1 auto;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;min-height:0;
   font-family:var(--tp-display);
   font-size:3.5rem;letter-spacing:.24em;text-transform:uppercase;
   color:var(--tp-sand);text-align:center;
