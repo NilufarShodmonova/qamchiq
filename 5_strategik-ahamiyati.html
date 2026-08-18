@@ -264,10 +264,10 @@ body.light #dots i.on{background:var(--gl)!important}
   font-size:clamp(15px,2.7vh,34px);letter-spacing:.2em;text-transform:uppercase;
   color:var(--gp);line-height:1.2;
 }
-/* элементы управления и подписи слайдов уходят из-под шапки */
-#lang{top:calc(var(--pg-head-h) + 1.8vh)!important}
-#play{top:calc(var(--pg-head-h) + 1.8vh)!important}
-.era{top:calc(var(--pg-head-h) + 8vh)!important}
+/* переключатель языка и кнопка паузы убраны: язык приходит из меню (?lang=),
+   слайды листаются касанием. Узлы остаются в DOM — на них завязан скрипт. */
+#lang,#play{display:none!important}
+.era{top:calc(var(--pg-head-h) + 2.6vh)!important}
 .num .big{top:calc(var(--pg-head-h) + 7vh)!important}
 .ti{padding-top:var(--pg-head-h)}
 
@@ -288,17 +288,49 @@ body.light #dots i.on{background:var(--gl)!important}
 #pg-main:active{transform:translateX(-50%) scale(.96)}
 #pg-main svg{width:1.5em;height:1.5em;fill:none;stroke:currentColor;
   stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* круглые кнопки перелистывания — в правом нижнем углу */
+#pg-nav{
+  position:fixed;right:clamp(16px,2.6vw,46px);bottom:2.4vh;z-index:60;
+  display:flex;gap:clamp(10px,1.1vw,20px);
+}
+#pg-nav button{
+  width:clamp(46px,6.4vh,74px);height:clamp(46px,6.4vh,74px);
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;border:1.5px solid rgba(201,151,63,.55);
+  background:rgba(9,17,29,.72);color:var(--gp);cursor:pointer;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  box-shadow:0 1.2vh 3.2vh rgba(0,0,0,.5);
+  transition:border-color .3s var(--e),background .3s var(--e),transform .2s var(--e);
+}
+#pg-nav button:hover{border-color:var(--g);background:rgba(16,31,56,.88)}
+#pg-nav button:active{transform:scale(.94)}
+#pg-nav svg{width:44%;height:44%;fill:none;stroke:currentColor;
+  stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+@media (max-aspect-ratio:1/1){
+  #pg-nav{right:5vw;gap:2.4vw}
+}
 /* точки-индикаторы поднимаются над кнопкой, подписи слайдов — над точками */
 #dots{bottom:8.6vh!important}
-.cr{bottom:8.8vh!important}
-.cap{padding-bottom:15vh!important}
-.fig .cap{padding-bottom:11vh!important}
+.cr{bottom:10.4vh!important}
+.cap{padding-bottom:18vh!important}
+.fig .cap{padding-bottom:12.5vh!important}
+/* кадры не прижимаются к шапке: рамка слайда начинается под ней */
+.vis.contain img{padding-top:calc(var(--pg-head-h) + 3vh)!important}
+.vis.portal img{top:calc(var(--pg-head-h) + 2.5vh)!important;height:calc(58% - 4vh)!important}
+@media (min-aspect-ratio:1/1){
+  .vis.portal img{height:calc(66% - 5vh)!important}
+}
+/* схемы масштабируются по высоте своего блока и не наезжают на подпись */
+.fig .art svg{width:100%;height:auto;max-width:100%;max-height:100%}
+/* содержимое слайдов начинается под шапкой */
+.fig,.lst,#src{padding-top:var(--pg-head-h)!important}
 @media (max-aspect-ratio:1/1){
   #pg-head{gap:clamp(10px,2.4vw,26px)}
   #pg-head b{font-size:clamp(14px,2.1vh,28px);letter-spacing:.16em}
   #dots{bottom:8vh!important}
-  .cr{bottom:11vh!important}
-  .cap,.num .cap{padding-bottom:14vh!important}
+  .cr{bottom:12.6vh!important}
+  .cap,.num .cap{padding-bottom:17vh!important}
 }
 </style>
 </head>
@@ -556,6 +588,10 @@ go(0);
 <button id="pg-main" type="button" aria-label="Bosh sahifa">
 <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
 <span id="pg-main-txt">MAIN</span></button>
+<div id="pg-nav">
+<button type="button" id="pg-prev" aria-label="Oldingi slayd"><svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8"/></svg></button>
+<button type="button" id="pg-next" aria-label="Keyingi slayd"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8"/></svg></button>
+</div>
 <script>
 /* шапка раздела и кнопка «на главную»: название берётся из плитки меню */
 (function(){
@@ -580,6 +616,19 @@ go(0);
   var start = btns.filter(function(b){ return b.getAttribute('data-l') === q; })[0];
   paint(q && NAME[q] ? q : 'uz');
   if (start && !start.classList.contains('on')) start.click();
+
+  /* перелистывание: тот же путь, что и у стрелок клавиатуры */
+  function step(key){
+    try { window.dispatchEvent(new KeyboardEvent('keydown', {key:key, bubbles:true})); }
+    catch(err){ var ev = document.createEvent('Event'); ev.initEvent('keydown', true, true);
+                ev.key = key; window.dispatchEvent(ev); }
+  }
+  document.getElementById('pg-prev').addEventListener('click', function(e){
+    e.stopPropagation(); step('ArrowLeft');
+  });
+  document.getElementById('pg-next').addEventListener('click', function(e){
+    e.stopPropagation(); step('ArrowRight');
+  });
 
   document.getElementById('pg-main').addEventListener('click', function(e){
     e.stopPropagation();
