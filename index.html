@@ -282,7 +282,7 @@ body.tp-mode-inner .tp-bg__veil{
 /* ============ ЭКРАН 2 — МЕНЮ ============ */
 #tp-menu{padding:0}
 .tp-menu__body{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
   gap:2.4rem;padding:2.2rem 3.6rem 1.5rem;min-height:0;
   overflow-y:auto;
 }
@@ -300,17 +300,20 @@ body.tp-mode-inner .tp-bg__veil{
   display:grid;grid-template-columns:repeat(6,1fr);gap:2.4rem;
   width:100%;max-width:100rem;
 }
-.tp-grid .tp-card{grid-column:span 2}
-.tp-grid .tp-card:nth-child(4){grid-column:2 / span 2}
+.tp-grid .tp-card:nth-child(1),
+.tp-grid .tp-card:nth-child(2){grid-column:span 3}
+.tp-grid .tp-card:nth-child(n+3){grid-column:span 2}
 @media (orientation:landscape){
   .tp-grid{grid-template-columns:repeat(5,1fr);max-width:162rem;gap:1.9rem}
   .tp-grid .tp-card,
-  .tp-grid .tp-card:nth-child(4){grid-column:auto}
+  .tp-grid .tp-card:nth-child(1),
+  .tp-grid .tp-card:nth-child(2),
+  .tp-grid .tp-card:nth-child(n+3){grid-column:auto}
 }
 
 .tp-card{
   position:relative;overflow:hidden;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
   gap:1.5rem;padding:3.4rem 1.6rem;
   min-height:25rem;
   background:linear-gradient(170deg,rgba(22,41,74,.86) 0%,rgba(11,21,38,.92) 100%);
@@ -334,12 +337,12 @@ body.tp-mode-inner .tp-bg__veil{
 .tp-card:hover::after{opacity:1}
 .tp-card:active{transform:scale(.975)}
 
-.tp-arch{position:relative;width:9.6rem;height:10.8rem;flex:0 0 auto}
+.tp-arch{position:relative;width:8.4rem;height:9.6rem;flex:0 0 auto}
 .tp-arch__frame{position:absolute;inset:0;width:100%;height:100%}
 .tp-arch__frame path{fill:none;stroke:var(--tp-gold);stroke-width:3.4;stroke-linecap:round}
 .tp-arch__ico{
   position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);
-  width:4.6rem;height:4.6rem;
+  width:4rem;height:4rem;
   fill:none;stroke:var(--tp-gold);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;
 }
 .tp-card__num{
@@ -401,18 +404,21 @@ body.tp-mode-inner .tp-bg__veil{
   .tp-hero__sub{font-size:1.55rem}
   .tp-splash__mid{transform:translateY(calc(-5vh + 100px))!important}
   .tp-head{padding:2.4rem 3rem}
-  .tp-menu__body{padding:2.6vh 4vw 2.6vh;gap:2.4vh;justify-content:center;overflow:hidden}
+  .tp-menu__body{padding:2.6vh 4vw 2.6vh;gap:2.4vh;justify-content:flex-end;overflow:hidden}
   .tp-grid{
     display:grid!important;
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(6,1fr);
     gap:2.2vh 3vw;
     width:100%;max-width:none;align-items:stretch;
   }
-  .tp-grid .tp-card{grid-column:span 1!important;width:auto;height:100%;min-height:0;max-height:23vh}
-  /* пятая карточка — во всю ширину */
-  .tp-grid .tp-card:nth-child(5){grid-column:1 / -1!important;min-height:0;max-height:17vh}
+  .tp-grid .tp-card{width:auto;height:100%;min-height:0}
+  /* верхний ряд — две карточки */
+  .tp-grid .tp-card:nth-child(1),
+  .tp-grid .tp-card:nth-child(2){grid-column:span 3!important;max-height:24vh}
+  /* нижний ряд — три карточки */
+  .tp-grid .tp-card:nth-child(n+3){grid-column:span 2!important;max-height:24vh}
   .tp-card__title{font-size:1.9rem;line-height:1.24}
-  .tp-arch{width:12rem}
+  .tp-arch{width:10.8rem;height:9.6rem}
   .tp-langs{gap:3rem}
   .tp-lang{width:16rem;height:12.8rem;border-radius:8rem 8rem 1rem 1rem}
   .tp-lang__code{font-size:3.3rem;padding-top:2.3rem}
@@ -590,11 +596,11 @@ uz:{
   menuTitle:'QAMCHIQ',
   menuSub:'BO\u2018LIMNI TANLANG',
   sections:[
-    {icon:'history', num:'I',   title:'QAMCHIQ TARIXI',            href:'pages/qamchiq-tarixi.html',      ready:0},
-    {icon:'build',   num:'II',  title:'YO‘L QURILISHI',            href:'pages/yol-qurilishi.html',       ready:0},
-    {icon:'tunnel',  num:'III', title:'TOG‘LARDAGI MUHANDISLIK',   href:'pages/tog-muhandisligi.html',    ready:0},
-    {icon:'photo',   num:'IV',  title:'FOTO ARXIV',                href:'pages/foto-arxiv.html',          ready:0},
-    {icon:'unite',   num:'V',   title:'STRATEGIK AHAMIYATI',       href:'pages/strategik-ahamiyati.html', ready:0}
+    {icon:'history', num:'I',   title:'QAMCHIQ TARIXI',            href:'1_qamchiq-tarixi.html',      ready:1},
+    {icon:'build',   num:'II',  title:'YO‘L QURILISHI',            href:'2_yol-qurilishi.html',       ready:1},
+    {icon:'tunnel',  num:'III', title:'TOG‘LARDAGI MUHANDISLIK',   href:'3_tog-muhandisligi.html',    ready:1},
+    {icon:'photo',   num:'IV',  title:'FOTO ARXIV',                href:'4_foto-arxiv.html',          ready:1},
+    {icon:'unite',   num:'V',   title:'STRATEGIK AHAMIYATI',       href:'5_strategik-ahamiyati.html', ready:1}
   ]
 },
 
@@ -606,11 +612,11 @@ ru:{
   menuTitle:'КАМЧИК',
   menuSub:'ВЫБЕРИТЕ РАЗДЕЛ',
   sections:[
-    {icon:'history', num:'I',   title:'ИСТОРИЯ КАМЧИКА',          href:'pages/qamchiq-tarixi.html',      ready:0},
-    {icon:'build',   num:'II',  title:'СТРОИТЕЛЬСТВО ДОРОГИ',     href:'pages/yol-qurilishi.html',       ready:0},
-    {icon:'tunnel',  num:'III', title:'ИНЖЕНЕРИЯ В ГОРАХ',        href:'pages/tog-muhandisligi.html',    ready:0},
-    {icon:'photo',   num:'IV',  title:'ФОТОАРХИВ',                href:'pages/foto-arxiv.html',          ready:0},
-    {icon:'unite',   num:'V',   title:'СТРАТЕГИЧЕСКОЕ ЗНАЧЕНИЕ',  href:'pages/strategik-ahamiyati.html', ready:0}
+    {icon:'history', num:'I',   title:'ИСТОРИЯ КАМЧИКА',          href:'1_qamchiq-tarixi.html',      ready:1},
+    {icon:'build',   num:'II',  title:'СТРОИТЕЛЬСТВО ДОРОГИ',     href:'2_yol-qurilishi.html',       ready:1},
+    {icon:'tunnel',  num:'III', title:'ИНЖЕНЕРИЯ В ГОРАХ',        href:'3_tog-muhandisligi.html',    ready:1},
+    {icon:'photo',   num:'IV',  title:'ФОТОАРХИВ',                href:'4_foto-arxiv.html',          ready:1},
+    {icon:'unite',   num:'V',   title:'СТРАТЕГИЧЕСКОЕ ЗНАЧЕНИЕ',  href:'5_strategik-ahamiyati.html', ready:1}
   ]
 },
 
@@ -622,11 +628,11 @@ en:{
   menuTitle:'KAMCHIK',
   menuSub:'SELECT A SECTION',
   sections:[
-    {icon:'history', num:'I',   title:'HISTORY OF KAMCHIK',           href:'pages/qamchiq-tarixi.html',      ready:0},
-    {icon:'build',   num:'II',  title:'BUILDING THE ROAD',            href:'pages/yol-qurilishi.html',       ready:0},
-    {icon:'tunnel',  num:'III', title:'ENGINEERING IN THE MOUNTAINS', href:'pages/tog-muhandisligi.html',    ready:0},
-    {icon:'photo',   num:'IV',  title:'PHOTO ARCHIVE',                href:'pages/foto-arxiv.html',          ready:0},
-    {icon:'unite',   num:'V',   title:'STRATEGIC IMPORTANCE',         href:'pages/strategik-ahamiyati.html', ready:0}
+    {icon:'history', num:'I',   title:'HISTORY OF KAMCHIK',           href:'1_qamchiq-tarixi.html',      ready:1},
+    {icon:'build',   num:'II',  title:'BUILDING THE ROAD',            href:'2_yol-qurilishi.html',       ready:1},
+    {icon:'tunnel',  num:'III', title:'ENGINEERING IN THE MOUNTAINS', href:'3_tog-muhandisligi.html',    ready:1},
+    {icon:'photo',   num:'IV',  title:'PHOTO ARCHIVE',                href:'4_foto-arxiv.html',          ready:1},
+    {icon:'unite',   num:'V',   title:'STRATEGIC IMPORTANCE',         href:'5_strategik-ahamiyati.html', ready:1}
   ]
 }
 };
