@@ -289,14 +289,14 @@ body.light #dots i.on{background:var(--gl)!important}
 #pg-main svg{width:1.5em;height:1.5em;fill:none;stroke:currentColor;
   stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-/* круглые кнопки перелистывания — в правом нижнем углу */
+/* круглые кнопки перелистывания — по краям экрана снизу: «назад» слева, «вперёд» справа */
 #pg-nav{
-  position:fixed;right:clamp(16px,2.6vw,46px);bottom:2.4vh;z-index:60;
-  display:flex;gap:clamp(10px,1.1vw,20px);
+  position:fixed;left:clamp(16px,2.6vw,46px);right:clamp(16px,2.6vw,46px);bottom:2.4vh;z-index:60;
+  display:flex;justify-content:space-between;align-items:center;pointer-events:none;
 }
 #pg-nav button{
   width:clamp(46px,6.4vh,74px);height:clamp(46px,6.4vh,74px);
-  display:flex;align-items:center;justify-content:center;
+  display:flex;align-items:center;justify-content:center;pointer-events:auto;
   border-radius:50%;border:1.5px solid rgba(201,151,63,.55);
   background:rgba(9,17,29,.72);color:var(--gp);cursor:pointer;
   -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
@@ -313,13 +313,17 @@ body.light #dots i.on{background:var(--gl)!important}
 #pg-nav svg{width:44%;height:44%;fill:none;stroke:currentColor;
   stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 @media (max-aspect-ratio:1/1){
-  #pg-nav{right:5vw;gap:2.4vw}
+  #pg-nav{left:5vw;right:5vw}
 }
 /* точки-индикаторы поднимаются над кнопкой, подписи слайдов — над точками */
 #dots{bottom:8.6vh!important}
 .cr{bottom:10.4vh!important}
-.cap{padding-bottom:18vh!important}
-.fig .cap{padding-bottom:12.5vh!important}
+/* счётчик слайдов — строго над круглой кнопкой «назад», по её центру */
+#cnt{left:calc(clamp(16px,2.6vw,46px) + clamp(46px,6.4vh,74px)/2)!important;right:auto!important;
+  transform:translateX(-50%)!important;white-space:nowrap!important;
+  bottom:calc(2.4vh + clamp(46px,6.4vh,74px) + 1.6vh)!important}
+.cap{padding-bottom:20vh!important}
+.fig .cap{padding-bottom:16vh!important}
 /* кадры не прижимаются к шапке: рамка слайда начинается под ней */
 .vis.contain img{padding-top:calc(var(--pg-head-h) + 3vh)!important}
 .vis.portal img{top:calc(var(--pg-head-h) + 2.5vh)!important;height:calc(58% - 4vh)!important}
@@ -335,7 +339,9 @@ body.light #dots i.on{background:var(--gl)!important}
   #pg-head b{font-size:clamp(14px,2.1vh,28px);letter-spacing:.16em}
   #dots{bottom:8vh!important}
   .cr{bottom:12.6vh!important}
-  .cap,.num .cap{padding-bottom:17vh!important}
+  #cnt{left:calc(5vw + clamp(46px,6.4vh,74px)/2)!important;
+    bottom:calc(2.4vh + clamp(46px,6.4vh,74px) + 2vh)!important}
+  .cap,.num .cap{padding-bottom:19vh!important}
 }
 
 /* ================= КИОСК: без масштабирования жестами =================
