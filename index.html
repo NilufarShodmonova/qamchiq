@@ -696,6 +696,14 @@ en:{
     $$('.tp-screen').forEach(function(s){ s.classList.remove('is-active'); });
     $(id).classList.add('is-active');
     document.body.classList.toggle('tp-mode-inner', id !== '#tp-splash');
+    /* таймер бездействия перезапускаем при каждой смене экрана:
+       на титульном он снимается, на внутренних — заводится заново */
+    resetIdle();
+  }
+
+  function isSplashActive(){
+    var el = $('#tp-splash');
+    return !!el && el.classList.contains('is-active');
   }
 
   function archSVG(iconKey){
@@ -832,6 +840,10 @@ en:{
   /* --- сброс по бездействию --- */
   function resetIdle(){
     clearTimeout(idleTimer);
+    idleTimer = null;
+    /* титульный экран сам по себе является заставкой — возвращать на него
+       некуда, поэтому здесь таймер бездействия не работает */
+    if (isSplashActive()) return;
     idleTimer = setTimeout(function(){ showScreen('#tp-splash'); }, IDLE_MS);
   }
   ['pointerdown','touchstart','mousemove','wheel','keydown'].forEach(function(ev){
