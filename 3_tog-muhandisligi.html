@@ -9,7 +9,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;overflow:hidden;background:#070d18}
 body{font-family:"Manrope","Segoe UI",Helvetica,Arial,sans-serif;color:#f5eedf;user-select:none}
-:root{--pg-head-h:clamp(64px,9.2vh,104px);--g:#c9973f;--gl:#e3b25e;--gp:#f0d9a8;--dim:#a7b8cd;--line:rgba(201,151,63,.32);
+:root{--pg-rem:calc(0.55vw + 0.55vh);/* шапка считается как в index.html: логотип 5.4rem (высота 5.13rem) + вертикальные поля 2rem + рамка 1px */--pg-head-h:calc(9.13 * var(--pg-rem) + 1px);--g:#c9973f;--gl:#e3b25e;--gp:#f0d9a8;--dim:#a7b8cd;--line:rgba(201,151,63,.32);
  --ink:#40301a;--ink2:#5b492f;
  --serif:"Cormorant Garamond","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
  --e:cubic-bezier(.22,.9,.28,1)}
@@ -250,19 +250,19 @@ body.light #dots i.on{background:var(--gl)!important}
    название раздела — тем же текстом, что и на плитке меню. */
 #pg-head{
   position:fixed;left:0;right:0;top:0;z-index:50;
-  height:var(--pg-head-h);padding:0 clamp(16px,3vw,52px);
-  display:flex;align-items:center;gap:clamp(12px,1.8vw,28px);
+  height:var(--pg-head-h);padding:0 calc(3.4 * var(--pg-rem));
+  display:flex;align-items:center;gap:calc(2.2 * var(--pg-rem));
   background:linear-gradient(135deg,rgba(16,31,56,.85) 0%,rgba(11,22,40,.70) 50%,rgba(7,14,26,.92) 100%);
   border-bottom:1px solid rgba(201,151,63,.35);
   -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
   box-shadow:0 1vh 3vh rgba(0,0,0,.5);
   pointer-events:none;
 }
-#pg-head img{height:clamp(34px,5.6vh,64px);width:auto;flex:0 0 auto;display:block}
+#pg-head img{width:calc(5.4 * var(--pg-rem));height:auto;flex:0 0 auto;display:block}
 #pg-head b{
-  font-family:var(--serif);font-weight:700;
-  font-size:clamp(15px,2.7vh,34px);letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gp);line-height:1.2;
+  font-family:var(--serif);font-weight:400;
+  font-size:calc(2.5 * var(--pg-rem));letter-spacing:.22em;text-transform:uppercase;
+  color:#f2dda8;line-height:1.2;
 }
 /* переключатель языка и кнопка паузы убраны: язык приходит из меню (?lang=),
    слайды листаются касанием. Узлы остаются в DOM — на них завязан скрипт. */
@@ -335,8 +335,8 @@ body.light #dots i.on{background:var(--gl)!important}
 /* содержимое слайдов начинается под шапкой */
 .fig,.lst,#src{padding-top:var(--pg-head-h)!important}
 @media (max-aspect-ratio:1/1){
-  #pg-head{gap:clamp(10px,2.4vw,26px)}
-  #pg-head b{font-size:clamp(14px,2.1vh,28px);letter-spacing:.16em}
+  :root{--pg-head-h:calc(9.93 * var(--pg-rem) + 1px)}
+  #pg-head{padding:0 calc(3 * var(--pg-rem))}
   #dots{bottom:8vh!important}
   .cr{bottom:12.6vh!important}
   #cnt{left:calc(5vw + clamp(46px,6.4vh,74px)/2)!important;
@@ -625,7 +625,27 @@ go(0);
     cur = l;
     head.textContent = NAME[l];
     btxt.textContent = MAIN[l];
+    fitHead();
   }
+  /* кегль шапки взят из index.html; длинное название (английское, например)
+     не переносим на вторую строку, а ужимаем ровно настолько, чтобы влезло */
+  function fitHead(){
+    head.style.fontSize = '';
+    head.style.whiteSpace = 'nowrap';
+    var box = head.parentElement, logo = head.previousElementSibling;
+    var cs = window.getComputedStyle(box);
+    var avail = box.clientWidth
+              - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
+              - (logo ? logo.getBoundingClientRect().width : 0)
+              - parseFloat(cs.columnGap || cs.gap || 0);
+    var w = head.scrollWidth;
+    if (avail > 0 && w > avail){
+      var size = parseFloat(window.getComputedStyle(head).fontSize);
+      head.style.fontSize = (size * avail / w).toFixed(2) + 'px';
+    }
+  }
+  window.addEventListener('resize', fitHead);
+  window.addEventListener('orientationchange', fitHead);
   var btns = [].slice.call(document.querySelectorAll('#lang button'));
   btns.forEach(function(b){
     b.addEventListener('click', function(){ paint(b.getAttribute('data-l')); });

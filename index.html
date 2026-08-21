@@ -18,8 +18,10 @@
   --tp-sand:#e9dcc4;
   --tp-text:#dfd4bf;
   --tp-text-dim:rgba(223,212,191,.68);
-  --tp-display:"Trajan Pro","Palatino Linotype","Book Antiqua",Georgia,"Times New Roman",serif;
-  --tp-body:"Segoe UI",Tahoma,Verdana,"Helvetica Neue",sans-serif;
+  /* те же стеки, что в разделах 1–5 */
+  --tp-display:"Cormorant Garamond","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+  --tp-body:"Manrope","Segoe UI",Helvetica,Arial,sans-serif;
+  --tp-sans:"Manrope","Segoe UI",Helvetica,Arial,sans-serif;
   --tp-shadow:0 1.2rem 3rem rgba(0,0,0,.55);
 }
 
@@ -87,14 +89,6 @@ body.tp-mode-inner .tp-bg__veil{
 
 /* ============ ЭКРАН 1 — ЯЗЫК ============ */
 #tp-splash{display:flex;flex-direction:column;justify-content:flex-start;align-items:center;padding:2rem 3rem 3rem;text-align:center;gap:0}
-
-/* Шрифты сплэша — те же стеки, что в разделах 1–5 */
-#tp-splash{
-  --tp-display:"Cormorant Garamond","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
-  --tp-body:"Manrope","Segoe UI",Helvetica,Arial,sans-serif;
-  --tp-sans:"Manrope","Segoe UI",Helvetica,Arial,sans-serif;
-  font-family:var(--tp-body);
-}
 
 .tp-splash__top{
   max-width:1020px;
