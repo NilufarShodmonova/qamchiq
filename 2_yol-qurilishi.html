@@ -344,6 +344,36 @@ body.light #dots i.on{background:var(--gl)!important}
   .cap,.num .cap{padding-bottom:19vh!important}
 }
 
+/* ================= ФОТО НА ВЕСЬ ЭКРАН, ПОДПИСИ ОТ СЕРЕДИНЫ =================
+   Арочные кадры (.vis.portal) растянуты на весь экран с затемнением,
+   как слайды с большой цифрой (.num). Подписи начинаются с 50% высоты. */
+.vis.portal{background:#0a1320}
+.vis.portal img{left:0!important;top:0!important;width:100%!important;height:100%!important;
+  border:none!important;border-radius:0!important;box-shadow:none!important}
+.sl.on .vis.portal img{animation:kb-in 15s linear both}
+.scrim{background:linear-gradient(180deg,rgba(7,13,24,.80) 0%,rgba(7,13,24,.30) 26%,rgba(7,13,24,.72) 50%,rgba(7,13,24,.97) 100%)}
+.cap,.num .cap{top:50%;bottom:auto!important;transform:translateY(-50%);padding-top:0!important;padding-bottom:0!important}
+.cap h2,.cap p{text-shadow:0 .3vh 2vh rgba(0,0,0,.7)}
+/* схемы: рисунок в верхней половине, подпись — с середины экрана */
+.fig .cap{flex:0 0 50%;padding-top:0!important;transform:none}
+/* горизонтальный экран: подпись под большой цифрой начинается с середины,
+   у схем — подпись над поднятыми кнопками, рисунок занимает остальное */
+@media (min-aspect-ratio:1/1){
+  .num .cap{transform:none}
+  .fig .cap{flex:0 0 auto;padding-top:2vh!important;padding-bottom:calc(10.4vh + 160px)!important}
+}
+
+/* кнопки, точки, счётчик и подписи источников подняты на 100px */
+#pg-main,#pg-nav{bottom:calc(2.4vh + 100px)}
+#dots{bottom:calc(8.6vh + 100px)!important}
+.cr{bottom:calc(10.4vh + 100px)!important}
+#cnt{bottom:calc(2.4vh + clamp(46px,6.4vh,74px) + 1.6vh + 100px)!important}
+@media (max-aspect-ratio:1/1){
+  #dots{bottom:calc(8vh + 100px)!important}
+  .cr{bottom:calc(12.6vh + 100px)!important}
+  #cnt{bottom:calc(2.4vh + clamp(46px,6.4vh,74px) + 2vh + 100px)!important}
+}
+
 /* ================= КИОСК: без масштабирования жестами =================
    Двумя пальцами страница не «щиплется», двойное касание не увеличивает,
    Ctrl+колесо и Ctrl +/-/0 перехватываются скриптом ниже. */
