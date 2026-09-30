@@ -360,19 +360,27 @@ body.light #dots i.on{background:var(--gl)!important}
    у схем — подпись над поднятыми кнопками, рисунок занимает остальное */
 @media (min-aspect-ratio:1/1){
   .num .cap{transform:none}
-  .fig .cap{flex:0 0 auto;padding-top:2vh!important;padding-bottom:calc(10.4vh + 160px)!important}
+  .fig .cap{flex:0 0 auto;padding-top:2vh!important;padding-bottom:calc(10.4vh + 130px)!important}
 }
 
-/* кнопки, точки, счётчик и подписи источников подняты на 100px */
-#pg-main,#pg-nav{bottom:calc(2.4vh + 100px)}
-#dots{bottom:calc(8.6vh + 100px)!important}
-.cr{bottom:calc(10.4vh + 100px)!important}
-#cnt{bottom:calc(2.4vh + clamp(46px,6.4vh,74px) + 1.6vh + 100px)!important}
+/* кнопки, точки, счётчик и подписи источников подняты на 70px */
+#pg-main,#pg-nav{bottom:calc(2.4vh + 70px)}
+#dots{bottom:calc(8.6vh + 70px)!important}
+.cr{bottom:calc(10.4vh + 70px)!important}
+#cnt{bottom:calc(2.4vh + clamp(46px,6.4vh,74px) + 1.6vh + 70px)!important}
 @media (max-aspect-ratio:1/1){
-  #dots{bottom:calc(8vh + 100px)!important}
-  .cr{bottom:calc(12.6vh + 100px)!important}
-  #cnt{bottom:calc(2.4vh + clamp(46px,6.4vh,74px) + 2vh + 100px)!important}
+  #dots{bottom:calc(8vh + 70px)!important}
+  .cr{bottom:calc(12.6vh + 70px)!important}
+  #cnt{bottom:calc(2.4vh + clamp(46px,6.4vh,74px) + 2vh + 70px)!important}
 }
+
+/* ================= ФОТОСЛАЙДЫ: ПОДПИСЬ В ВЕРХНЕЙ ПОЛОВИНЕ =================
+   Центр подписи — посередине между шапкой и серединой экрана. */
+.sl .vis.portal ~ .cap{top:calc((var(--pg-head-h) + 50vh) / 2)!important;bottom:auto!important;
+  transform:translateY(-50%)!important}
+
+/* ================= ТИТУЛЬНЫЙ СЛАЙД: ТЕКСТ С 30% ВЫСОТЫ ================= */
+.ti{justify-content:flex-start!important;padding-top:30vh!important}
 
 /* ================= КИОСК: без масштабирования жестами =================
    Двумя пальцами страница не «щиплется», двойное касание не увеличивает,
